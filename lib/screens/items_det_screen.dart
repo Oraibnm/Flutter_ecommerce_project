@@ -1,6 +1,8 @@
+import 'dart:convert';
+import 'package:ass_login/screens/utl/constant_value.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
+import 'package:http/http.dart' as http;
 import '../model/images_model.dart';
 import 'cart_screen.dart';
 
@@ -23,16 +25,16 @@ class ItemDetScreenState extends State<ItemDetScreen>{
   var price ;
   var des ;
   ItemDetScreenState(this.id , this.name, this.price, this.des);
-  List<Images> imgList = [
-    Images(1,
-        "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg"),
-    Images(2,
-        "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg"),
-    Images(3,
-        "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg"),
-    Images(4,
-        "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg")
-  ];
+
+
+  List<ImagesModel> imgList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    getItemImages();
+  }
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -94,9 +96,24 @@ class ItemDetScreenState extends State<ItemDetScreen>{
           });
         },
         child: Text("Add To Cart"),
+
       ),
       ),
 
     );
+  }
+  Future getItemImages() async {
+    final response = await http.post(
+        Uri.parse("${ConstantValue.URL}getItemImages.php"),
+        body: {"Id_items": id});
+
+    if (response.statusCode == 200) {
+      var jsonBody = jsonDecode(response.body);
+      var images = jsonBody["Images"];
+      for (Map i in images) {
+        imgList.add(ImagesModel(i["Id"], i["Image"]));
+      }
+    }
+    setState(() {});
   }
 }

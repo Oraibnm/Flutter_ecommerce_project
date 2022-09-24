@@ -27,6 +27,17 @@ class CartScreenState extends State<CartScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text("Cart"),
+        backgroundColor: Colors.orangeAccent,
+        actions:<Widget> [
+          IconButton(
+            onPressed: (){},
+            icon: Icon(Icons.notifications_none),
+
+          )
+        ],
+      ),
       body: ListView.builder(
         itemBuilder: (context, index) {
           return Container(

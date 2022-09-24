@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 import 'package:ass_login/constants.dart';
 import 'package:ass_login/screens/main_screen.dart';
 import 'package:ass_login/screens/signup.dart';
@@ -96,10 +97,7 @@ class _LoginState extends State<Login> {
                                 passwordTextEditingController.text)) {
                               showErrorPassword = true;
                             } else {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => MainScreen()),
-                              );
+                              login();
                             }
                             setState(() {});
                           },
@@ -116,10 +114,16 @@ class _LoginState extends State<Login> {
                           style: TextButton.styleFrom(backgroundColor: Colors.pinkAccent),
                           onPressed: () {
                             if (isEmail(emailTextEditingController.text)) {
-                              showErrorEmail = false;
-                            } else {
                               showErrorEmail = true;
+                            } else if (!validatePassword (passwordTextEditingController.text)){
+                              showErrorPassword = true;
                             }
+                            else {
+                              login();
+                            }
+                            setState(() {
+
+                            });
                             if (validateStructure(
                                 passwordTextEditingController.text)) {
                               showErrorPassword = true;

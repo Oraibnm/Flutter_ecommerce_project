@@ -1,3 +1,4 @@
+import 'package:ass_login/screens/Login.dart';
 import 'package:ass_login/screens/splash_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +15,17 @@ class MoreScreenState extends State<MoreScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text("More"),
+        backgroundColor: Colors.orangeAccent,
+        actions:<Widget> [
+          IconButton(
+            onPressed: (){},
+            icon: Icon(Icons.notifications_none),
+
+          )
+        ],
+      ),
       body: Container(
         width: MediaQuery.of(context).size.width,
         child: Column(
@@ -24,7 +36,7 @@ class MoreScreenState extends State<MoreScreen> {
             TextButton(
                 onPressed: () {
                   Navigator.of(context).pushReplacement(MaterialPageRoute(
-                      builder: (BuildContext context) => SplashPage()));
+                      builder: (BuildContext context) => Login()));
                 },
                 child: Text("Logout")),
           ],

@@ -72,7 +72,7 @@ class _signupState extends State<signup> {
                     child: Column(
                       children: [
                         SizedBox(
-                          height: 100,
+                          height: 50,
                         ),
                         Text(
                           "Sign up",
@@ -126,10 +126,7 @@ class _signupState extends State<signup> {
                                   confPasswordTextEditingController.text) {
                                 showErrorConPassword = true;
                               } else {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => MainScreen()),
-                                );
+                                signUp();
                               }
                               setState(() {});
                             },

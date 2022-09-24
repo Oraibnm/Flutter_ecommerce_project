@@ -1,5 +1,10 @@
+import 'dart:convert';
+
 import 'package:ass_login/model/images_model.dart';
+import 'package:ass_login/screens/items_det_screen.dart';
+import 'package:ass_login/screens/utl/constant_value.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 
 import '../model/categouries.dart';
@@ -13,40 +18,42 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> {
-  List<Categoires> cateList = [
-    Categoires(1, "cat 1",
-        "https://alitools.io/en/showcase/image?url=https%3A%2F%2Fae01.alicdn.com%2Fkf%2FH8b603376bcb7443aa44e9c0d1c5100a8E.jpg_480x480.jpg_.webp"),
-    Categoires(2, "cat 2",
-        "https://www.accessorize.com/dw/image/v2/BDLV_PRD/on/demandware.static/-/Sites-accessorize-master-catalog/default/dw7120f901/images/large/21_48476181_1.jpg?sw=1000&sh=1281&sm=cut"),
-    Categoires(3, "cat 3",
-        "https://www.accessorize.com/dw/image/v2/BDLV_PRD/on/demandware.static/-/Sites-accessorize-master-catalog/default/dw6ecf0971/images/large/02_48400081_2.jpg?sw=1000&sh=1281&sm=cut"),
-    Categoires(4, "cat 4",
-        "https://www.accessorize.com/dw/image/v2/BDLV_PRD/on/demandware.static/-/Sites-accessorize-master-catalog/default/dwd22e667d/images/large/01_48157981_2.jpg?sw=663&sh=848&sm=cut")
-  ];
-
-  List<Images> imgList = [
-    Images(1,
-        "https://alitools.io/en/showcase/image?url=https%3A%2F%2Fae01.alicdn.com%2Fkf%2FH8b603376bcb7443aa44e9c0d1c5100a8E.jpg_480x480.jpg_.webp"),
-    Images(2,
-        "https://www.accessorize.com/dw/image/v2/BDLV_PRD/on/demandware.static/-/Sites-accessorize-master-catalog/default/dw7120f901/images/large/21_48476181_1.jpg?sw=1000&sh=1281&sm=cut"),
-    Images(3,
-        "https://www.accessorize.com/dw/image/v2/BDLV_PRD/on/demandware.static/-/Sites-accessorize-master-catalog/default/dw6ecf0971/images/large/02_48400081_2.jpg?sw=1000&sh=1281&sm=cut"),
-    Images(4,
-        "https://www.accessorize.com/dw/image/v2/BDLV_PRD/on/demandware.static/-/Sites-accessorize-master-catalog/default/dwd22e667d/images/large/01_48157981_2.jpg?sw=663&sh=848&sm=cut")
-  ];
-
+  List<Categoires> cateList = [];
+  List<ImagesModel> imgList = [];
+  @override
+  void initState() {
+    super.initState();
+    getCategories();
+    //getBanarImages();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
+      appBar: AppBar(
+        title: Text("Home"),
+        backgroundColor: Colors.orangeAccent,
+        actions:<Widget> [
+          IconButton(
+            onPressed: (){},
+            icon: Icon(Icons.notifications_none),
+
+          )
+        ],
+      ),
+      body: ListView(
+        children: <Widget>[
+          SizedBox(
+            height: 15,
+          ),
+
+
           SizedBox(
             width: MediaQuery.of(context).size.width,
             height: (MediaQuery.of(context).size.height * 0.25) - 5,
             child: ListView.builder(
                 scrollDirection: Axis.horizontal,
                 shrinkWrap: true,
-                itemCount: imgList.length,
+                itemCount: cateList.length,
                 itemBuilder: (context, index) {
                   return Image.network(cateList[index].image);
                 }),
@@ -54,34 +61,136 @@ class HomePageState extends State<HomePage> {
           SizedBox(
             height: 30,
           ),
+
+          Text('Categories' ,
+            style:
+            TextStyle(
+                fontFamily: 'Poppins' , fontSize: 25.0 , fontWeight: FontWeight.bold) ,
+          textAlign:TextAlign.center),
           SizedBox(
-            width: MediaQuery.of(context).size.width,
-            height: (MediaQuery.of(context).size.height * 0.75) - 240,
-            child: GridView.builder(
-                itemCount: cateList.length,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2),
-                itemBuilder: (context, index) {
-                  return InkWell(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => ItemsScreen(
-                                cateList[index].id, cateList[index].name)),
-                      );
-                    },
-                    child: Column(
-                      children: [
-                        Image.network(cateList[index].image),
-                        Text(cateList[index].name)
-                      ],
-                    ),
-                  );
-                }),
-          )
+            height: 15,
+          ),
+          neck_chain(context),
+          rings(context),
+          brecelet(context),
+
+          // SizedBox(
+          //   width: MediaQuery.of(context).size.width,
+          //   height: (MediaQuery.of(context).size.height * 0.75) - 200,
+          //   child: GridView.builder(
+          //       itemCount: cateList.length,
+          //       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          //           crossAxisCount: 2),
+          //       itemBuilder: (context, index) {
+          //         return InkWell(
+          //           onTap: () {
+          //             Navigator.push(
+          //               context,
+          //               MaterialPageRoute(
+          //                   builder: (context) => ItemsScreen(
+          //                       cateList[index].id, cateList[index].name)),
+          //             );
+          //           },
+          //           child: Column(
+          //             children: [
+          //               Image.network(cateList[index].image),
+          //               Text(cateList[index].name)
+          //             ],
+          //           ),
+          //         );
+          //       }),
+          // ),
+          // SizedBox(
+          //   height: 15,
+          // ),
+
         ],
       ),
     );
   }
+  Widget neck_chain(BuildContext context) {
+    return const Center(
+      child: Card(
+        child: SizedBox(
+          width: 300,
+          height: 100,
+          child: Center(child: Text('Neck Chain',
+
+              style:
+              TextStyle(
+              fontFamily: 'Poppins' , fontSize: 20 , fontWeight: FontWeight.normal) ,
+              textAlign:TextAlign.center)),
+
+        ),
+        color: Color (0xFFFFE0B2),
+      ),
+
+    );
+  }
+  Widget rings(BuildContext context) {
+    return const Center(
+      child: Card(
+        child: SizedBox(
+          width: 300,
+          height: 100,
+          child: Center(child: Text('Rings' ,
+              style:
+              TextStyle(
+              fontFamily: 'Poppins' , fontSize: 20 , fontWeight: FontWeight.normal) ,
+              textAlign:TextAlign.center)),
+
+        ),
+        color: Color (0xFFFFE0B2),
+      ),
+
+    );
+  }
+  Widget brecelet(BuildContext context) {
+    return const Center(
+      child: Card(
+        child: SizedBox(
+          width: 300,
+          height: 100,
+          child: Center(child: Text('Brecelet' ,
+              style:
+          TextStyle(
+              fontFamily: 'Poppins' , fontSize: 20 , fontWeight: FontWeight.normal) ,
+              textAlign:TextAlign.center))
+        ),
+
+        color: Color (0xFFFFE0B2),
+
+    )
+    );
+  }
+
+  Future getCategories() async {
+    final response = await http.get(
+      Uri.parse("${ConstantValue.URL}GetCategories.php"),
+    );
+
+    if (response.statusCode == 200) {
+      var jsonBody = jsonDecode(response.body);
+      var categories = jsonBody["categories"];
+      for (Map i in categories) {
+        cateList.add(Categoires(i["Id"], i["Name"], i["Image"]));
+      }
+      setState(() {});
+    }
+  }
+  Future getBanarImages() async {
+    final response = await http.get(
+      Uri.parse("${ConstantValue.URL}GetBanarImages.php"),
+    );
+
+    if (response.statusCode == 200) {
+      var jsonBody = jsonDecode(response.body);
+      var images = jsonBody["images"];
+      for (Map i in images) {
+        imgList.add(ImagesModel(i["Id"], i["Image"]));
+      }
+    }
+    setState(() {});
+  }
+
 }

@@ -20,21 +20,18 @@ class MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
-
-      appBar: AppBar(
-
-      ),
       body: _widget,
       bottomNavigationBar: BottomNavigationBar(
-        items: [
+        items:const <BottomNavigationBarItem> [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.shopping_cart), label: "Cart"),
+          BottomNavigationBarItem(icon: Icon(Icons.shopping_cart), label: "Cart"),
           BottomNavigationBarItem(icon: Icon(Icons.more), label: "More"),
         ],
         onTap: onTap,
         currentIndex: currentIndex,
+       //s backgroundColor: Colors.indigoAccent,
       ),
     );
   }

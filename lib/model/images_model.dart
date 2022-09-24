@@ -1,5 +1,6 @@
-class Images {
+class ImagesModel {
   var id;
   var image;
-  Images(this.id, this.image);
+
+  ImagesModel(this.id, this.image );
 }
