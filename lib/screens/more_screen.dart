@@ -1,6 +1,8 @@
 import 'package:ass_login/screens/Login.dart';
 import 'package:ass_login/screens/home_screen.dart';
 import 'package:ass_login/screens/main_screen.dart';
+import 'package:ass_login/screens/map_screen.dart';
+import 'package:ass_login/screens/order_screen.dart';
 import 'package:ass_login/screens/profile_screen.dart';
 import 'package:ass_login/screens/splash_page.dart';
 import 'package:flutter/cupertino.dart';
@@ -45,7 +47,16 @@ class MoreScreenState extends State<MoreScreen> {
               Navigator.of(context).pushReplacement(MaterialPageRoute(
                   builder: (BuildContext context) => ProfileScreen()));
             }, child: Text("Profile")),
-            TextButton(onPressed: () {}, child: Text("Orders")),
+            TextButton(onPressed: () {
+              Navigator.of(context).pushReplacement(MaterialPageRoute(
+                  builder: (BuildContext context) => OrdersScreen()));
+            }, child: Text("Orders")),
+            TextButton(
+                onPressed: () {
+                  Navigator.of(context).pushReplacement(MaterialPageRoute(
+                      builder: (BuildContext context) => MapScreen()));
+                },
+                child: Text("Google Map")),
             TextButton(
                 onPressed: () {
                   Navigator.of(context).pushReplacement(MaterialPageRoute(

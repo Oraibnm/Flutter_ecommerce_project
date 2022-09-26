@@ -20,7 +20,7 @@ class _LoginState extends State<Login> {
 
   bool showErrorEmail = false;
   bool showErrorPassword = false;
-
+  bool _isChecked = false;
   bool sec = true;
   var visable = Icon(
     Icons.visibility,
@@ -65,7 +65,7 @@ class _LoginState extends State<Login> {
                     child: Column(
                       children: [
                         SizedBox(
-                          height: 100,
+                          height: 60,
                         ),
                         Text(
                           "Log In",
@@ -76,7 +76,7 @@ class _LoginState extends State<Login> {
                           ),
                         ),
                         SizedBox(
-                          height: 100,
+                          height: 70,
                         ),
                         buildEmail(),
                         SizedBox(
@@ -84,8 +84,9 @@ class _LoginState extends State<Login> {
                         ),
                         buildPassword(),
                         SizedBox(
-                          height: 50,
+                          height: 10,
                         ),
+                        buildRememberMe(),
                         ElevatedButton(
                           style: TextButton.styleFrom(backgroundColor: Colors.pinkAccent),
                           onPressed: () {
@@ -269,7 +270,35 @@ class _LoginState extends State<Login> {
       ],
     );
   }
+  void _handleRemeberme(bool value) {
+    _isChecked = value;
+    SharedPreferences.getInstance().then(
+          (prefs) {
+        prefs.setBool("remember_me", value);
+        prefs.setString('email', emailTextEditingController.text);
+        prefs.setString('password', passwordTextEditingController.text);
+      },
+    );
+    setState(() {
+      _isChecked = value;
+    });
+  }
+  Widget buildRememberMe() {
+    return Row(
+      children: [
+            Checkbox(
+            activeColor: Color(0xff00C8E8),
+            value: _isChecked,
+            // onChanged: _handleRemeberme(_isChecked)) ,
+            onChanged: (bool? value) {
+              _handleRemeberme(value!);
+            }),
+            //SizedBox(width: 10.0),
+            Text("Remember Me", style: TextStyle(color: Color(0xff646464), fontSize: 15,fontFamily: 'Rubic')),
+          ],);
 
+
+  }
 
   bool isEmail(String em) {
     String p =

@@ -1,3 +1,4 @@
+import 'package:ass_login/screens/more_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -55,7 +56,11 @@ class MapScreenState extends State<MapScreen> {
       bottomNavigationBar: SizedBox(
         height: (MediaQuery.of(context).size.height * .15) - 50,
         width: MediaQuery.of(context).size.width,
-        child: TextButton(onPressed: () {}, child: Text("Done")),
+        child: TextButton(onPressed: () {
+          Navigator.of(context).pushReplacement(MaterialPageRoute(
+              builder: (BuildContext context) => MoreScreen()));
+
+        }, child: Text("Done" )),
       ),
     );
   }
