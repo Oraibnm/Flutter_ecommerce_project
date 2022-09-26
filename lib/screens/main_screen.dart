@@ -31,6 +31,7 @@ class MainScreenState extends State<MainScreen> {
         ],
         onTap: onTap,
         currentIndex: currentIndex,
+       backgroundColor: Colors.white,
        //s backgroundColor: Colors.indigoAccent,
       ),
     );

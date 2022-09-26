@@ -1,6 +1,6 @@
 class Categoires {
-  int id;
-  String name;
-  String image;
+  var id;
+  var name;
+  var image;
   Categoires(this.id, this.name, this.image);
 }

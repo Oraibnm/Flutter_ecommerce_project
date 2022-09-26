@@ -1,4 +1,7 @@
 import 'package:ass_login/screens/Login.dart';
+import 'package:ass_login/screens/home_screen.dart';
+import 'package:ass_login/screens/main_screen.dart';
+import 'package:ass_login/screens/profile_screen.dart';
 import 'package:ass_login/screens/splash_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +19,13 @@ class MoreScreenState extends State<MoreScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("More"),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          color: Colors.black, onPressed: () {
+          Navigator.of(context).pushReplacement(MaterialPageRoute(
+              builder: (BuildContext context) => MainScreen()));
+        },
+        ),
         backgroundColor: Colors.orangeAccent,
         actions:<Widget> [
           IconButton(
@@ -31,7 +40,11 @@ class MoreScreenState extends State<MoreScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            TextButton(onPressed: () {}, child: Text("Profile")),
+            TextButton(onPressed: (
+                ) {
+              Navigator.of(context).pushReplacement(MaterialPageRoute(
+                  builder: (BuildContext context) => ProfileScreen()));
+            }, child: Text("Profile")),
             TextButton(onPressed: () {}, child: Text("Orders")),
             TextButton(
                 onPressed: () {

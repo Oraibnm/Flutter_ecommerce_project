@@ -1,28 +1,33 @@
+import 'dart:convert';
+
+import 'package:ass_login/screens/utl/constant_value.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import '../model/cart_model.dart';
 
 
 
 class CartScreen extends StatefulWidget {
+  var userId;
+
   @override
   State<StatefulWidget> createState() {
-    return CartScreenState();
+    return CartScreenState(userId);
   }
 }
 
 class CartScreenState extends State<CartScreen> {
-  List<CartModel> cartList = [
-    CartModel(1, "item 1", 25, 3,
-        "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg"),
-    CartModel(2, "item 2", 25, 3,
-        "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg"),
-    CartModel(3, "item 3", 25, 3,
-        "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg"),
-    CartModel(4, "item 4", 25, 3,
-        "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg")
-  ];
+  var userId;
+  CartScreenState(this.userId);
+  List<CartModel> cartList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    GetCart();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -100,4 +105,22 @@ class CartScreenState extends State<CartScreen> {
       bottomNavigationBar: TextButton(onPressed: () {}, child: Text("Next")),
     );
   }
-}
+
+  Future GetCart() async {
+    final response = await http.post(
+        Uri.parse("${ConstantValue.URL}GetCart.php"),
+        body: {"Id_users": userId }
+    );
+      if (response.statusCode == 200) {
+        var jsonBody = jsonDecode(response.body);
+        var cart = jsonBody['cart'];
+
+        for (Map i in cart) {
+          cartList.add(CartModel(
+               i["Id"], i["Name"], i["Price"], i["count"], i["HomeImage"]));
+        }
+        setState(() {});
+      }
+
+    }
+  }
