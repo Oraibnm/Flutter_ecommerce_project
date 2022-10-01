@@ -355,7 +355,6 @@ class _LoginState extends State<Login> {
           'Password':passwordTextEditingController.text,
         }
     );
-
     if (response.statusCode == 200) {
       var jsonBody = jsonDecode(response.body);
       var result = jsonBody['result'];
