@@ -1,29 +1,50 @@
 import 'dart:convert';
 
 import 'package:ass_login/screens/utl/constant_value.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../model/cart_model.dart';
+import 'package:http/http.dart' as http;
 
-class OrdersScreen extends StatefulWidget {
-  const OrdersScreen({Key? key}) : super(key: key);
+class OrderPage extends StatefulWidget {
+  const OrderPage({Key? key}) : super(key: key);
 
   @override
-  State<OrdersScreen> createState() => _OrdersScreenState();
+  State<OrderPage> createState() => _OrderPageState();
 }
 
-class _OrdersScreenState extends State<OrdersScreen> {
-  String Id = '';
-  List ordersList = [];
-  var total;
+class _OrderPageState extends State<OrderPage> {
 
-  @override
-  void initState() {
-    super.initState();
-    getOrders();
+  var userId = '0';
+  getPref() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    userId = preferences.getString(ConstantValue.ID)!;
+    setState(() {
+      userId = preferences.getString(ConstantValue.ID)!;
+    });
+    return userId;
+  }
+
+  Future fetchData() async{
+    final http.Response response = await http.post(
+        Uri.parse("${ConstantValue.URL}GetOrders.php"),
+        body: {
+          "Id_users" : await getPref()
+        }
+    );
+
+    if (response.statusCode != 200){
+      throw Future.error('Request Error');
+    }
+    else{
+      var jsonData = json.decode(response.body);
+      print(jsonData);
+      try {
+        return jsonData;
+      }
+      catch(e){
+        throw Future.error('Server Error');
+      }
+    }
   }
 
   @override
@@ -33,45 +54,50 @@ class _OrdersScreenState extends State<OrdersScreen> {
         title: Text("Orders"),
         backgroundColor: Colors.orangeAccent,
       ),
-      body: Padding(
-          padding: EdgeInsets.all(12.0),
-          child: Container(
-            child: ListView(
-              shrinkWrap: true,
-              // itemBuilder: ((context, index) => Row(
-              // children: [
-              // SizedBox(width: 25,),
-              // Text(ordersList[index]["TotalPrice"]),
-              // ],
-              // )
-              // ),
-              //   itemCount:0,
-            ),
-          )),
+      body: Column(
+        children: [
+          Container(
+            width: double.infinity,
+            alignment: Alignment.center,
+            margin: const EdgeInsets.only(bottom: 20,top: 10),
+            child: const Text("My Orders: ", style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
+          ),
+          FutureBuilder(
+              future: fetchData(),
+              builder: (context, AsyncSnapshot snapshot){
+                if (snapshot.hasData){
+                  return ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: snapshot.data['orders'].length,
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        isThreeLine: true,
+                        leading: const Icon(Icons.shopping_cart),
+                        title: Text("${snapshot.data['orders'][index]['Note'].toString()}"),
+                        subtitle: Text("Order Num : ${snapshot.data['orders'][index]['Id'].toString()}"),
+                        trailing: Column(
+                          children: [
+                            Text("Total Price: " , style: TextStyle(color: Colors.black)),
+                            Text(snapshot.data['orders'][index]['TotalPrice'].toString() , style: TextStyle(color: Colors.black)),
+                          ],
+                        ),
+                      );
+                    },
+                  );
+                }
+                else if (snapshot.hasError) {
+                  return Center(child: Text("Error " + snapshot.error.toString()));
+                }
+                else{
+                  return Container(
+                      alignment: Alignment.center,
+                      child: CircularProgressIndicator()
+                  );
+                }
+              }
+          ),
+        ],
+      ),
     );
-  }
-
-  Future getOrders() async {
-    await getId();
-    final response =
-        await http.post(Uri.parse("${ConstantValue.URL}getOrders.php"), body: {
-      "Id_users": 55.toString(),
-    });
-    if (response.statusCode == 200) {
-      var jsonBody = jsonDecode(response.body);
-      for (var element in jsonBody['order']) {
-        ordersList.add(element);
-      }
-      print(ordersList);
-      setState(() {});
-    } else {
-      print("exception");
-    }
-  }
-
-  Future getId() async {
-    final prefs = await SharedPreferences.getInstance();
-    Id = prefs.getString("Id")!;
-    setState(() {});
   }
 }

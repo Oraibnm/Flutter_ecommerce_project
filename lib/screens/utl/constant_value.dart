@@ -4,4 +4,5 @@ class ConstantValue{
   static String NAME = "Name";
   static String EMAIL = "Email";
   static String PHONE = "Phone";
+  static String ROLE = "Role";
 }

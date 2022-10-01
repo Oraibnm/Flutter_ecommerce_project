@@ -20,7 +20,9 @@ class ImagePickerScreenState extends State<ImagePickerScreen> {
     return Scaffold(
         appBar: AppBar(),
         body: Center(
-            child: _image != null? Image.file(_image!) : IconButton(
+            child: _image != null
+                ? Image.file(_image!)
+                : IconButton(
                     onPressed: () {
                       showOptionChooser();
                     },

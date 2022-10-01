@@ -1,7 +1,6 @@
+import 'package:ass_login/screens/CartScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-import 'cart_screen.dart';
 import 'home_screen.dart';
 import 'more_screen.dart';
 
@@ -42,7 +41,7 @@ class MainScreenState extends State<MainScreen> {
     if (currentIndex == 0) {
       _widget = HomePage();
     } else if (currentIndex == 1) {
-      _widget = CartScreen();
+      _widget = CartScreen(true);
     } else {
       _widget = MoreScreen();
     }

@@ -3,17 +3,17 @@ import 'dart:convert';
 import 'package:ass_login/screens/utl/constant_value.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+
 import '../model/images_model.dart';
-import 'cart_screen.dart';
+import 'package:http/http.dart' as http;
+
+import 'CartScreen.dart';
 
 class ItemDetScreen extends StatefulWidget {
   var id;
-
   var name;
-
   var price;
-
   var des;
 
   ItemDetScreen(this.id, this.name, this.price, this.des);
@@ -26,43 +26,62 @@ class ItemDetScreen extends StatefulWidget {
 
 class ItemDetScreenState extends State<ItemDetScreen> {
   var id;
-
   var name;
-
   var price;
-
   var des;
+
+  var userId = '0';
 
   ItemDetScreenState(this.id, this.name, this.price, this.des);
 
-  List<ImagesModel> imgList = [];
+  List<ImagesModel> imagelist = [];
+
+  getPref() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+
+    userId = preferences.getString(ConstantValue.ID)!;
+
+    //  print(id);
+    setState(() {
+      userId = preferences.getString(ConstantValue.ID)!;
+    });
+    return userId;
+  }
+
+  Future addToCart() async {
+    final response = await http.post(
+      Uri.parse("${ConstantValue.URL}AddToCart.php"),
+      body: {
+        'Id_users': await getPref(), // parm1
+        'Id_items': widget.id.toString(), // parm2
+      },
+    );
+  }
 
   @override
   void initState() {
     super.initState();
+    getPref();
     getItemImages();
   }
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Item Details"),
-        backgroundColor: Colors.orangeAccent,
-      ),
+      appBar: AppBar(),
       body: SingleChildScrollView(
         child: Column(
           children: [
             SizedBox(
               width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height,
+              height: MediaQuery.of(context).size.height * .25,
               child: ListView.builder(
-
-                  itemCount: imgList.length,
-                  itemBuilder: (context, index) {
-                    return Image.network(imgList[index].image);
-                  }),
+                scrollDirection: Axis.horizontal,
+                itemCount: imagelist.length,
+                itemBuilder: (context, index) {
+                  return Image.network(imagelist[index].image);
+                },
+              ),
             ),
             Text(
               name,
@@ -81,21 +100,22 @@ class ItemDetScreenState extends State<ItemDetScreen> {
             Text(
               des,
               style: TextStyle(
-                fontSize: 25,
+                fontSize: 20,
                 color: Colors.black,
               ),
-            )
+            ),
           ],
         ),
       ),
       bottomNavigationBar: TextButton(
-        onPressed: () {
-          showDialog(
+          onPressed: () {
+            addToCart();
+            showDialog(
               context: context,
               builder: (context) {
                 return AlertDialog(
                   title: Text("Amazing items"),
-                  content: Text("Whate Do You Want to Do ?"),
+                  content: Text("What Do You Want to Do ?"),
                   actions: [
                     TextButton(
                         onPressed: () {
@@ -103,7 +123,7 @@ class ItemDetScreenState extends State<ItemDetScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => CartScreen()),
+                                builder: (context) => CartScreen(false)),
                           );
                         },
                         child: Text("View Cart")),
@@ -112,13 +132,13 @@ class ItemDetScreenState extends State<ItemDetScreen> {
                           Navigator.pop(context);
                           Navigator.pop(context);
                         },
-                        child: Text("Con Shopping"))
+                        child: Text("Con Shoping"))
                   ],
                 );
-              });
-        },
-        child: Text("Add To Cart"),
-      ),
+              },
+            );
+          },
+          child: Text("Add To Cart")),
     );
   }
 
@@ -131,11 +151,9 @@ class ItemDetScreenState extends State<ItemDetScreen> {
       var jsonBody = jsonDecode(response.body);
       var images = jsonBody["Images"];
       for (Map i in images) {
-        imgList.add(ImagesModel(i["Id"], i["Image"]));
+        imagelist.add(ImagesModel(i["Id"], i["Image"]));
       }
     }
     setState(() {});
   }
-
-  //AddTo cart and call befor dialog
 }

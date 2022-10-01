@@ -49,7 +49,7 @@ class MoreScreenState extends State<MoreScreen> {
             }, child: Text("Profile")),
             TextButton(onPressed: () {
               Navigator.of(context).pushReplacement(MaterialPageRoute(
-                  builder: (BuildContext context) => OrdersScreen()));
+                  builder: (BuildContext context) => OrderPage()));
             }, child: Text("Orders")),
             TextButton(
                 onPressed: () {
@@ -69,3 +69,4 @@ class MoreScreenState extends State<MoreScreen> {
     );
   }
 }
+

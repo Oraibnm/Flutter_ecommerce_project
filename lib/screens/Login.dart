@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:math';
 import 'package:ass_login/constants.dart';
 import 'package:ass_login/screens/admin_login.dart';
+import 'package:ass_login/screens/admin_main_screen.dart';
 import 'package:ass_login/screens/main_screen.dart';
 import 'package:ass_login/screens/signup.dart';
 import 'package:ass_login/screens/utl/constant_value.dart';
@@ -358,17 +359,26 @@ class _LoginState extends State<Login> {
     if (response.statusCode == 200) {
       var jsonBody = jsonDecode(response.body);
       var result = jsonBody['result'];
-      if (result){
+      if (result) {
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString(ConstantValue.ID, jsonBody["Id"]);
         await prefs.setString(ConstantValue.NAME, jsonBody["Name"]);
         await prefs.setString(ConstantValue.PHONE, jsonBody["Phone"]);
         await prefs.setString(ConstantValue.EMAIL, jsonBody["Email"]);
-
+        await prefs.setString(ConstantValue.ROLE, jsonBody["Role"]);
         //if statmente admin or customer
-        Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (BuildContext context) => MainScreen()));
+        if (prefs.setString(ConstantValue.ROLE, "Role") == 'admin') {
+          Navigator.of(context).pushReplacement(
+              MaterialPageRoute(
+                  builder: (BuildContext context) => AdminMainScreen()));
+        }
+        else {
+          Navigator.of(context).pushReplacement(
+              MaterialPageRoute(
+                  builder: (BuildContext context) => MainScreen()));
+        }
       }
+
       else{
         showDialog(
             context:context,

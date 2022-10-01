@@ -149,4 +149,19 @@ class AdminCategoryState extends State<AdminCategory> {
     }
     setState(() {});
   }
+
+  Future AddCart() async {
+    var request = http.MultipartRequest("POST", Uri.parse("AddCat.php"));
+    var pic;
+    request.fields['Name'] ="Test New Cat";
+    request.fields['Id_statetype']="1";
+    request.files.add(pic);
+    var response = await request.send();
+    var responsedata=await response.stream.toBytes();
+    var responseString = String.fromCharCodes(responsedata);
+    var jsonBody=jsonDecode(responseString);
+    bool result = jsonBody['result'];
+    print(result);
+
+  }
 }
