@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 
 import 'package:ass_login/screens/utl/constant_value.dart';
@@ -9,25 +8,32 @@ import '../model/images_model.dart';
 import 'cart_screen.dart';
 
 class ItemDetScreen extends StatefulWidget {
-  var id ;
-  var name ;
-  var price ;
+  var id;
+
+  var name;
+
+  var price;
+
   var des;
 
-  ItemDetScreen(this.id , this.name, this.price, this.des);
+  ItemDetScreen(this.id, this.name, this.price, this.des);
+
   @override
   State<StatefulWidget> createState() {
-    return ItemDetScreenState(id , name , price, des);
+    return ItemDetScreenState(id, name, price, des);
   }
 }
 
-class ItemDetScreenState extends State<ItemDetScreen>{
-  var id ;
-  var name ;
-  var price ;
-  var des ;
-  ItemDetScreenState(this.id , this.name, this.price, this.des);
+class ItemDetScreenState extends State<ItemDetScreen> {
+  var id;
 
+  var name;
+
+  var price;
+
+  var des;
+
+  ItemDetScreenState(this.id, this.name, this.price, this.des);
 
   List<ImagesModel> imgList = [];
 
@@ -41,69 +47,81 @@ class ItemDetScreenState extends State<ItemDetScreen>{
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: Text("Item Details"),
+        backgroundColor: Colors.orangeAccent,
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: [
             SizedBox(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height,
-              child: ListView.builder(itemBuilder: (context, index) {
-                return Image.network(imgList[index].image);
-              }
+              child: ListView.builder(
+
+                  itemCount: imgList.length,
+                  itemBuilder: (context, index) {
+                    return Image.network(imgList[index].image);
+                  }),
+            ),
+            Text(
+              name,
+              style: TextStyle(
+                fontSize: 30,
+                color: Colors.black,
               ),
             ),
-            Text(name,
-            style: TextStyle(
-              fontSize: 30,
-              color: Colors.black,),),
-            Text('$price' ,
-            style: TextStyle(
-              fontSize: 25,
-              color: Colors.black,
-            ),
-            ),
-            Text(des ,
+            Text(
+              '$price',
               style: TextStyle(
                 fontSize: 25,
                 color: Colors.black,
               ),
-
+            ),
+            Text(
+              des,
+              style: TextStyle(
+                fontSize: 25,
+                color: Colors.black,
+              ),
             )
           ],
         ),
       ),
-      bottomNavigationBar:
-      TextButton(onPressed: () {
-      }, child: TextButton(
+      bottomNavigationBar: TextButton(
         onPressed: () {
-          showDialog(context: context, builder: (context) {
-            return AlertDialog(
-              title:Text ("Amazing items") ,
-              content: Text("Whate Do You Want to Do ?"),
-              actions: [
-                TextButton(onPressed: (){
-                  Navigator.pop(context);
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => CartScreen()),
-                  );
-                },
-                    child: Text("View Cart")),
-                TextButton(onPressed: () {
-                  Navigator.pop(context);
-                  Navigator.pop(context);
-                },
-                    child: Text("Con Shopping"))
-              ],
-            );
-          });
+          showDialog(
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                  title: Text("Amazing items"),
+                  content: Text("Whate Do You Want to Do ?"),
+                  actions: [
+                    TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => CartScreen()),
+                          );
+                        },
+                        child: Text("View Cart")),
+                    TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                          Navigator.pop(context);
+                        },
+                        child: Text("Con Shopping"))
+                  ],
+                );
+              });
         },
         child: Text("Add To Cart"),
-
       ),
-      ),
-
     );
   }
+
   Future getItemImages() async {
     final response = await http.post(
         Uri.parse("${ConstantValue.URL}getItemImages.php"),
@@ -118,4 +136,6 @@ class ItemDetScreenState extends State<ItemDetScreen>{
     }
     setState(() {});
   }
+
+  //AddTo cart and call befor dialog
 }

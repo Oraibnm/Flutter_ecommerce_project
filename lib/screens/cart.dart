@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:ass_login/screens/order_screen.dart';
 import 'package:ass_login/screens/utl/constant_value.dart';
 import 'package:flutter/cupertino.dart';
@@ -24,6 +23,13 @@ class CartScreenState extends State<CartScreen> {
   String Id = '';
   int totalPrice = 0;
   List<CartModel> cartList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    addOrder();
+    getId();
+  }
 
 
   @override
@@ -115,7 +121,9 @@ class CartScreenState extends State<CartScreen> {
         width: MediaQuery.of(context).size.width,
         height: 75,
         child: TextButton(onPressed: () {
-          addOrder();
+          setState(() async{
+          await  addOrder();
+          });
 
         }, child: Text("Add Order")),
       ),

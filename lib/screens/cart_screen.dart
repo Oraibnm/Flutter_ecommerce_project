@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import '../model/cart_model.dart';
+import '../model/images_model.dart';
 
 
 
@@ -19,18 +20,27 @@ class CartScreen extends StatefulWidget {
 }
 
 class CartScreenState extends State<CartScreen> {
-  var userId;
+
+  var userId =  SharedPreferences.getInstance();
+ // userId.getString(ConstantValue.ID, jsonBody["Id"]);
+
   CartScreenState(this.userId);
   List<CartModel> cartList = [];
+  List<ImagesModel> imgList = [];
 
   @override
   void initState() {
     super.initState();
     GetCart();
+   // getBanarImages();ConstantValue.ID, jsonBody["Id"]
   }
-
   @override
   Widget build(BuildContext context) {
+    savePref(String user)async {
+      SharedPreferences preferences = await SharedPreferences.getInstance();
+      var x ;
+      //preferences.getString(ConstantValue().ID, x);
+    }
     return Scaffold(
       appBar: AppBar(
         title: Text("Cart"),
@@ -86,8 +96,11 @@ class CartScreenState extends State<CartScreen> {
                     Text(cartList[index].count.toString()),
                     IconButton(
                       onPressed: () {
+
                         cartList[index].count = cartList[index].count + 1;
-                        setState(() {});
+                        setState((){
+
+                        });
                       },
                       icon: Icon(
                         Icons.add,
@@ -107,6 +120,7 @@ class CartScreenState extends State<CartScreen> {
   }
 
   Future GetCart() async {
+
     final response = await http.post(
         Uri.parse("${ConstantValue.URL}GetCart.php"),
         body: {"Id_users": userId }
@@ -123,4 +137,5 @@ class CartScreenState extends State<CartScreen> {
       }
 
     }
+
   }

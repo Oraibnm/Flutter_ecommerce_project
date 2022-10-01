@@ -18,55 +18,58 @@ class OrdersScreen extends StatefulWidget {
 class _OrdersScreenState extends State<OrdersScreen> {
   String Id = '';
   List ordersList = [];
-  var total ;
+  var total;
 
   @override
   void initState() {
     super.initState();
     getOrders();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(),
-        body: Padding(
-        padding: EdgeInsets.all(12.0),
-    child: Container(
-    child: ListView(
-    shrinkWrap: true,
-    // itemBuilder: ((context, index) => Row(
-    // children: [
-    // SizedBox(width: 25,),
-    // Text(ordersList[index]["TotalPrice"]),
-    // ],
-    // )
-    // ),
-    //   itemCount:0,
-    ),
-    )
-    ),
+      appBar: AppBar(
+        title: Text("Orders"),
+        backgroundColor: Colors.orangeAccent,
+      ),
+      body: Padding(
+          padding: EdgeInsets.all(12.0),
+          child: Container(
+            child: ListView(
+              shrinkWrap: true,
+              // itemBuilder: ((context, index) => Row(
+              // children: [
+              // SizedBox(width: 25,),
+              // Text(ordersList[index]["TotalPrice"]),
+              // ],
+              // )
+              // ),
+              //   itemCount:0,
+            ),
+          )),
     );
   }
+
   Future getOrders() async {
     await getId();
-    final response = await http.post(
-        Uri.parse("${ConstantValue.URL}getOrders.php"),
-        body: {
-          "Id_users": 55.toString(),
-        });
+    final response =
+        await http.post(Uri.parse("${ConstantValue.URL}getOrders.php"), body: {
+      "Id_users": 55.toString(),
+    });
     if (response.statusCode == 200) {
       var jsonBody = jsonDecode(response.body);
-      for(var element in jsonBody['order']){
+      for (var element in jsonBody['order']) {
         ordersList.add(element);
       }
       print(ordersList);
       setState(() {});
-    }else {
+    } else {
       print("exception");
     }
   }
 
-  Future getId()async{
+  Future getId() async {
     final prefs = await SharedPreferences.getInstance();
     Id = prefs.getString("Id")!;
     setState(() {});

@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+
 class General {
   static savePrefString(String key, String value) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();

@@ -37,12 +37,14 @@ class SplashPageState extends State<SplashPage> {
 
     if (userId == "") {
       Timer(
-          Duration(seconds: 3),
+          Duration(seconds: 2),
               () => Navigator.of(context).pushReplacement(MaterialPageRoute(
               builder: (BuildContext context) => Login())));
     } else {
+      //if admin -> admin screen
+      //else =-> customer screen
       Timer(
-          Duration(seconds: 3),
+          Duration(seconds: 2),
               () => Navigator.of(context).pushReplacement(MaterialPageRoute(
               builder: (BuildContext context) => MainScreen())));
     }

@@ -24,7 +24,9 @@ class MapScreenState extends State<MapScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: Text ("Map"),
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: [

@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:math';
 import 'package:ass_login/constants.dart';
-import 'package:ass_login/screens/admin_login.dart';
+import 'package:ass_login/screens/admin_main_screen.dart';
 import 'package:ass_login/screens/main_screen.dart';
 import 'package:ass_login/screens/signup.dart';
 import 'package:ass_login/screens/utl/constant_value.dart';
@@ -11,14 +11,13 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 
-class Login extends StatefulWidget {
+class AdminLogin extends StatefulWidget {
   @override
-  State<Login> createState() => _LoginState();
+  State<AdminLogin> createState() => _AdminLoginState();
 }
 TextEditingController emailTextEditingController = TextEditingController();
 TextEditingController passwordTextEditingController = TextEditingController();
-class _LoginState extends State<Login> {
-
+class _AdminLoginState extends State<AdminLogin> {
   bool showErrorEmail = false;
   bool showErrorPassword = false;
   bool _isChecked = false;
@@ -43,7 +42,8 @@ class _LoginState extends State<Login> {
               Container(
                 height: double.infinity,
                 width: double.infinity,
-                decoration: BoxDecoration(),
+                decoration: BoxDecoration(
+                ),
                 child: Padding(
                   padding: const EdgeInsets.only(right: 20, left: 20),
                   child: SingleChildScrollView(
@@ -53,7 +53,7 @@ class _LoginState extends State<Login> {
                           height: 60,
                         ),
                         Text(
-                          "Log In",
+                          "Admin Log In",
                           style: TextStyle(
                             color: Colors.black,
                             fontSize: 40,
@@ -61,7 +61,7 @@ class _LoginState extends State<Login> {
                           ),
                         ),
                         SizedBox(
-                          height: 50,
+                          height: 70,
                         ),
                         buildEmail(),
                         SizedBox(
@@ -92,49 +92,9 @@ class _LoginState extends State<Login> {
                         SizedBox(
                           height: 20,
                         ),
-                        Text("If you haven't Account ! Sign up :)"),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        ElevatedButton(
-                          style: TextButton.styleFrom(backgroundColor: Colors.pinkAccent),
-                          onPressed: () {
-                            if (isEmail(emailTextEditingController.text)) {
-                              showErrorEmail = true;
-                            } else if (!validatePassword (passwordTextEditingController.text)){
-                              showErrorPassword = true;
-                            }
-                            else {
-                              login();
-                            }
-                            setState(() {
 
-                            });
-                            if (validateStructure(
-                                passwordTextEditingController.text)) {
-                              showErrorPassword = true;
-                            } else {
-                              // showErrorPassword = true;
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => signup()));
-                            }
 
-                            setState(() {});
-                          },
-                          child: Text("Sign Up"),
-                        ),
-                        buildAdmin(),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            buildFacebook(),
-                            buildGoogle(),
-                            buildTwitter()
-                          ],
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
+
                       ],
                     ),
                   ),
@@ -268,16 +228,16 @@ class _LoginState extends State<Login> {
   Widget buildRememberMe() {
     return Row(
       children: [
-            Checkbox(
+        Checkbox(
             activeColor: Color(0xff00C8E8),
             value: _isChecked,
             // onChanged: _handleRemeberme(_isChecked)) ,
             onChanged: (bool? value) {
               _handleRemeberme(value!);
             }),
-            //SizedBox(width: 10.0),
-            Text("Remember Me", style: TextStyle(color: Color(0xff646464), fontSize: 15,fontFamily: 'Rubic')),
-          ],);
+        //SizedBox(width: 10.0),
+        Text("Remember Me", style: TextStyle(color: Color(0xff646464), fontSize: 15,fontFamily: 'Rubic')),
+      ],);
 
 
   }
@@ -299,52 +259,6 @@ class _LoginState extends State<Login> {
     RegExp regExp = new RegExp(pattern);
     return regExp.hasMatch(value);
   }
-  Widget buildFacebook() {
-    return Container(
-      height: 50,
-      width: 50,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Image.asset("assets/facebook.png"),
-    );
-  }
-  Widget buildGoogle() {
-    return Container(
-      height: 50,
-      width: 50,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Image.asset("assets/search.png"),
-    );
-  }
-  Widget buildTwitter() {
-    return Container(
-      height: 50,
-      width: 50,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Image.asset("assets/twitter.png"),
-    );
-  }
-  Widget buildAdmin() {
-    return Container(
-      width: 100,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-
-      ),
-      child: TextButton(onPressed: () {
-        Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => AdminLogin()));
-
-      },
-        child: Text("Admin"),),
-
-    );
-  }
 
   Future login() async {
     final response = await http.post(
@@ -364,15 +278,14 @@ class _LoginState extends State<Login> {
         await prefs.setString(ConstantValue.NAME, jsonBody["Name"]);
         await prefs.setString(ConstantValue.PHONE, jsonBody["Phone"]);
         await prefs.setString(ConstantValue.EMAIL, jsonBody["Email"]);
-
-        //if statmente admin or customer
         Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (BuildContext context) => MainScreen()));
+            MaterialPageRoute(builder: (BuildContext context) => AdminMainScreen()));
       }
       else{
         showDialog(
             context:context,
             builder: (context){
+
               return AlertDialog(
                 title: Text("Worrning !!"),
                 content: Text(jsonBody['msg']),

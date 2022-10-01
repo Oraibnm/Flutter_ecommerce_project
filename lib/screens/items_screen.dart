@@ -65,6 +65,7 @@ class ItemsScreenState extends State<ItemsScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(categName),
+        backgroundColor: Colors.orangeAccent,
       ),
       body: ListView.builder(
         padding: EdgeInsets.all(10),
